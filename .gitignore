@@ -1,0 +1,6 @@
+videos/origin/*.mp4
+
+videos/hls/FFBatch
+videos/hls/*.mp4
+videos/hls/*.m3u8
+videos/hls/*.ts

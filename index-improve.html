@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+
+    <style>
+        body {
+            width: 980px;
+            margin: 0 auto;
+
+            display: flex;
+            flex-direction: column;
+
+
+            text-align: center;
+        }
+
+        video {
+            align-self: center;
+        }
+    </style>
+
+</head>
+
+<body>
+    <h1>Video Gốc Đã Convert</h1>
+    <video id="video" width="500" height="auto" controls>
+        Your browser does not support the video tag.
+    </video>
+
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const video = document.getElementById('video');
+            const videoSrc = './videos/hls/FFBatch/PXH2910.m3u8'; // Đường dẫn tới file HLS
+
+            if (Hls.isSupported()) {
+                const hls = new Hls();
+                hls.loadSource(videoSrc);
+                hls.attachMedia(video);
+                hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                    console.log('HLS.js is supported and video is ready to play');
+                });
+            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                video.src = videoSrc;
+                video.addEventListener('loadedmetadata', () => {
+                    console.log('Native HLS support and video is ready to play');
+                });
+            } else {
+                console.error('This browser does not support HLS.');
+            }
+        });
+
+        /*
+        
+            Giải thích:
+
+            - Hls.isSupported(): 
+                Nếu trình duyệt hỗ trợ HLS.js, tạo một đối tượng Hls, tải nguồn video và gắn 
+                nó vào phần tử video. Sự kiện Hls.Events.MANIFEST_PARSED được gọi khi video sẵn sàng phát.
+
+            - video.canPlayType('application/vnd.apple.mpegurl'): 
+                Nếu trình duyệt có thể phát HLS natively 
+                (như Safari), gán nguồn video trực tiếp và lắng nghe sự kiện loadedmetadata để biết khi video 
+                sẵn sàng.
+
+            - Fallback Error Handling: 
+                Nếu trình duyệt không hỗ trợ HLS hoặc HLS.js, hiển thị thông báo lỗi.
+        
+        */
+    </script>
+</body>
+
+</html>
